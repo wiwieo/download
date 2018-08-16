@@ -17,7 +17,7 @@ func main() {
 		}
 	}()
 	s := &server{
-		d: download.NewDownload(100),
+		d: download.NewDownload(2),
 	}
 	http.HandleFunc("/download", s.dl)
 	http.ListenAndServe("127.0.0.1:8080", nil)
@@ -27,8 +27,10 @@ func (s *server) dl(w http.ResponseWriter, r *http.Request){
 	r.ParseForm()
 	url := r.FormValue("url")
 	method := r.FormValue("method")
+	name := r.FormValue("name")
 	s.d.Url = url
 	s.d.Method = method
+	s.d.FileName = name
 	s.d.DownloadByGet()
 	w.Write([]byte("下载成功！"))
 }
